@@ -10,6 +10,7 @@ function AtestadosTable({ atestados }) {
           <th className="text-left p-3 font-medium">Dias</th>
           <th className="text-left p-3 font-medium">Tipo</th>
           <th className="text-center p-3 font-medium">Lançado?</th>
+          <th className="text-center p-3 font-medium">Editar</th>
         </tr>
       </thead>
       <tbody>
@@ -31,6 +32,11 @@ function AtestadosTable({ atestados }) {
                   Não
                 </span>
               )}
+            </td>
+            <td className="p-3 text-center">
+              <button className="bg-green-600 text-green-400 hover:bg-green-950 text-xs px-3 py-1 rounded-full cursor-pointer">
+                Editar
+              </button>
             </td>
           </tr>
         ))}
