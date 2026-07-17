@@ -1,7 +1,8 @@
 export const mockAtestados = [
   {
     id: 1,
-    turma: 'III - A',
+    turmaNumero: 'III',
+    turmaLetra: 'A',
     nome: 'Liz Dara Cardoso Dias',
     data: '2026-06-23',
     ateData: '2026-06-27',
@@ -12,7 +13,8 @@ export const mockAtestados = [
   },
   {
     id: 2,
-    turma: 'II - B',
+    turmaNumero: 'II',
+    turmaLetra: 'B',
     nome: 'José Vitor Santos Sales',
     data: '2026-06-18',
     ateData: '2026-06-30',
@@ -23,7 +25,8 @@ export const mockAtestados = [
   },
   {
     id: 3,
-    turma: 'V - E',
+    turmaNumero: 'V',
+    turmaLetra: 'E',
     nome: 'Luiza Kelly Ferreira da Silva',
     data: '2026-05-19',
     ateData: '2026-05-19',

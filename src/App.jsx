@@ -1,10 +1,24 @@
+import { useState } from 'react'
 import AtestadosTable from "./components/AtestadosTable"
 import { mockAtestados } from "./data/mockAtestados"
 import FiltrosBar from "./components/FiltrosBar"
 import Atencao from "./components/Atencao"
 import DataLimite from "./components/DataLimite"
+import NovoAtestado from "./components/NovoAtestado"
 
 function App() {
+  const [atestados, setAtestados] = useState(mockAtestados)
+  const [modalAberto, setModalAberto] = useState(false)
+
+  const handleSalvarAtestado = (novoAtestado) => {
+    const novo = {
+      id: atestados.length + 1,
+      ...novoAtestado,
+      status: 'ativo'
+    }
+    setAtestados(prev => [novo, ...prev])
+  }
+
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 p-6">
       <div className="flex justify-between items-center mb-4">
@@ -17,12 +31,18 @@ function App() {
 
       <FiltrosBar
         turmas={['III - A', 'II - B', 'V - E']}
-        onNovoAtestado={() => console.log('clicou em novo atestado')}
+        onNovoAtestado={() => setModalAberto(true)}
       />
 
       <div className="border border-neutral-800 rounded-lg overflow-hidden">
-        <AtestadosTable atestados={mockAtestados} />
+        <AtestadosTable atestados={atestados} />
       </div>
+
+      <NovoAtestado
+        isOpen={modalAberto}
+        onClose={() => setModalAberto(false)}
+        onSalvar={handleSalvarAtestado}
+      />
     </div>
   )
 }

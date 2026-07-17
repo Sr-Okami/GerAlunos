@@ -16,7 +16,7 @@ function AtestadosTable({ atestados }) {
       <tbody>
         {atestados.map((atestado) => (
           <tr key={atestado.id} className="border-t border-neutral-800">
-            <td className="p-3">{atestado.turma}</td>
+            <td className="p-3">{atestado.turmaNumero} - {atestado.turmaLetra}</td>
             <td className="p-3">{atestado.nome}</td>
             <td className="p-3">{atestado.data}</td>
             <td className="p-3">{atestado.ateData}</td>
@@ -33,9 +33,12 @@ function AtestadosTable({ atestados }) {
                 </span>
               )}
             </td>
-            <td className="p-3 text-center">
+            <td className="p-3 text-center gap-2 flex justify-center">
               <button className="bg-green-600 text-green-400 hover:bg-green-950 text-xs px-3 py-1 rounded-full cursor-pointer">
                 Editar
+              </button>
+              <button className="bg-red-600 text-red-400 hover:bg-red-950 text-xs px-3 py-1 rounded-full cursor-pointer">
+                Excluir
               </button>
             </td>
           </tr>
