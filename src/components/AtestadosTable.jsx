@@ -1,8 +1,15 @@
-function AtestadosTable({ atestados }) {
+import BotaoExcluir from './BotaoExcluir.jsx'
+import BotaoEditar from './BotaoEditar.jsx'
+import BotaoCopiar from './BotaoCopiar.jsx'
+import { formatarData } from '../utils/datas.js'
+import BotaoObservacao from './BotaoObservacao.jsx'
+
+
+function AtestadosTable({ atestados, onExcluir, onToggleLancado, onEditar }) {
   return (
     <table className="w-full text-sm">
       <thead>
-        <tr className="bg-neutral-800 text-neutral-400">
+        <tr className="bg-neutral-800 text-neutral-400 rounded-t-lg">
           <th className="text-left p-3 font-medium">Turma</th>
           <th className="text-left p-3 font-medium">Nome</th>
           <th className="text-left p-3 font-medium">Data</th>
@@ -17,29 +24,30 @@ function AtestadosTable({ atestados }) {
         {atestados.map((atestado) => (
           <tr key={atestado.id} className="border-t border-neutral-800">
             <td className="p-3">{atestado.turmaNumero} - {atestado.turmaLetra}</td>
-            <td className="p-3">{atestado.nome}</td>
-            <td className="p-3">{atestado.data}</td>
-            <td className="p-3">{atestado.ateData}</td>
+            <td className="p-3">{atestado.nome}
+              <BotaoCopiar texto={atestado.nome} />
+              <BotaoObservacao obs={atestado.obs} /></td>
+            <td className="p-3">{formatarData(atestado.data)}</td>
+            <td className="p-3">{formatarData(atestado.ateData)}</td>
             <td className="p-3">{atestado.dias}</td>
             <td className="p-3">{atestado.tipo}</td>
             <td className="p-3 text-center">
-              {atestado.lancado ? (
-                <span className="bg-green-900 text-green-400 text-xs px-3 py-1 rounded-full">
-                  Sim
-                </span>
-              ) : (
-                <span className="bg-yellow-900 text-yellow-400 text-xs px-3 py-1 rounded-full">
-                  Não
-                </span>
-              )}
+              <button onClick={() => onToggleLancado(atestado.id)}>
+                {atestado.lancado ? (
+                  <span className="bg-green-900 text-green-400 text-xs px-3 py-1 rounded-full">
+                    Sim
+                  </span>
+                ) : (
+                  <span className="bg-yellow-900 text-yellow-400 text-xs px-3 py-1 rounded-full">
+                    Não
+                  </span>
+                )}
+
+              </button>
             </td>
             <td className="p-3 text-center gap-2 flex justify-center">
-              <button className="bg-green-600 text-green-400 hover:bg-green-950 text-xs px-3 py-1 rounded-full cursor-pointer">
-                Editar
-              </button>
-              <button className="bg-red-600 text-red-400 hover:bg-red-950 text-xs px-3 py-1 rounded-full cursor-pointer">
-                Excluir
-              </button>
+              <BotaoEditar onClick={() => onEditar(atestado)} />
+              <BotaoExcluir onClick={() => onExcluir(atestado.id)} />
             </td>
           </tr>
         ))}

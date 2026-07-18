@@ -1,10 +1,10 @@
 import { useState } from 'react'
 
-function FiltrosBar({ turmas, onNovoAtestado }) {
+function FiltrosBar({ turmas, onNovoAtestado, ordenarPor, onOrdenarChange }) {
   const [busca, setBusca] = useState('')
   const [turmaSelecionada, setTurmaSelecionada] = useState('todas')
-  const [mes, setMes] = useState()
-  const [jus, setJus] = useState()
+  const [mes, setMes] = useState('')
+  const [jus, setJus] = useState('')
 
   return (
     <div className="flex justify-between items-center mb-4 gap-3 flex-wrap">
@@ -58,12 +58,16 @@ function FiltrosBar({ turmas, onNovoAtestado }) {
         </select>
 
         {/* Filtro e Ordenação */}
-        <button
-          onClick={() => console.log('ordenar')}
-          className="bg-neutral-900 border hover:bg-blue-800 border-neutral-800 rounded-md px-3 py-2 text-sm cursor-pointer"
+        <select
+          value={ordenarPor}
+          onChange={(e) => onOrdenarChange(e.target.value)}
+          className="bg-neutral-900 border border-neutral-800 rounded-md px-3 py-2 text-sm w-48"
         >
-          Ordenar
-        </button>
+          <option value="nome-asc">Nome (A-Z)</option>
+          <option value="nome-desc">Nome (Z-A)</option>
+          <option value="data-asc">Data (mais antigo)</option>
+          <option value="data-desc">Data (mais recente)</option>
+        </select>
 
         {/* Campo de Busca */}
         <input

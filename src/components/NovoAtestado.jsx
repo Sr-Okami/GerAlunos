@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-function NovoAtestado({ isOpen, onClose, onSalvar }) {
+function NovoAtestado({ isOpen, onClose, onSalvar, onAtualizar, atestadoEditando }) {
   const [formData, setFormData] = useState({
     nome: '',
     turmaNumero: '',
@@ -11,6 +11,22 @@ function NovoAtestado({ isOpen, onClose, onSalvar }) {
     obs: '',
     tipo: 'Atestado'
   })
+  useEffect(() => {
+    if (atestadoEditando) {
+      setFormData(atestadoEditando)
+    } else {
+      setFormData({
+        nome: '',
+        turmaNumero: '',
+        turmaLetra: '',
+        data: '',
+        ateData: '',
+        dias: '',
+        obs: '',
+        tipo: 'Atestado'
+      })
+    }
+  }, [atestadoEditando])
 
   // Função para calcular dias úteis (segunda a sexta)
   const calcularDiasUteis = (dataInicio, dataFim) => {
@@ -69,7 +85,11 @@ function NovoAtestado({ isOpen, onClose, onSalvar }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSalvar(formData)
+    if (atestadoEditando) {
+      onAtualizar(formData)
+    } else {
+      onSalvar(formData)
+    }
     onClose()
   }
 
@@ -79,7 +99,9 @@ function NovoAtestado({ isOpen, onClose, onSalvar }) {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-neutral-900 rounded-lg p-6 w-full max-w-md border border-neutral-800">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Novo Atestado</h2>
+          <h2 className="text-xl font-semibold">
+            {atestadoEditando ? 'Editar Atestado' : 'Novo Atestado'}
+          </h2>
           <button
             onClick={onClose}
             className="text-neutral-400 hover:text-white text-xl"
@@ -223,7 +245,7 @@ function NovoAtestado({ isOpen, onClose, onSalvar }) {
               type="submit"
               className="px-4 py-2 rounded-md text-sm bg-amber-500 text-neutral-950 font-medium hover:bg-amber-400"
             >
-              Salvar
+              {atestadoEditando ? 'Atualizar' : 'Salvar'}
             </button>
           </div>
         </form>
