@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useClickOutside } from '../hooks/useClickOutside'
 
 function motivoAtencao(atestado) {
   const motivos = []
@@ -11,15 +12,19 @@ function motivoAtencao(atestado) {
   if (atestado.obs && atestado.obs.trim() !== '') {
     motivos.push('Com observação')
   }
+  if (!atestado.ateData) {
+    motivos.push('Data indeterminada')
+  }
   return motivos.join(' · ')
 }
 
-function Atencao({ atestados }) {
+function Atencao({ atestados, onDispensar }) {
   const [aberto, setAberto] = useState(false)
+  const ref = useClickOutside(aberto, () => setAberto(false))
   const quantidade = atestados.length
 
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block" ref={ref}>
       <button
         onClick={() => setAberto(!aberto)}
         className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition relative cursor-pointer"
@@ -48,15 +53,24 @@ function Atencao({ atestados }) {
           {atestados.map((atestado) => (
             <div
               key={atestado.id}
-              className="px-2 py-2 border-t border-neutral-800"
+              className="px-2 py-2 border-t border-neutral-800 flex justify-between items-start gap-2"
             >
-              <p className="text-sm">{atestado.nome}</p>
-              <p className="text-xs text-neutral-500">
-                {atestado.turmaNumero} - {atestado.turmaLetra}
-              </p>
-              <p className="text-xs text-yellow-500 mt-1">
-                {motivoAtencao(atestado)}
-              </p>
+              <div>
+                <p className="text-sm">{atestado.nome}</p>
+                <p className="text-xs text-neutral-500">
+                  {atestado.turmaNumero} - {atestado.turmaLetra}
+                </p>
+                <p className="text-xs text-yellow-500 mt-1">
+                  {motivoAtencao(atestado)}
+                </p>
+              </div>
+              <button
+                onClick={() => onDispensar(atestado.id)}
+                title="Remover da lista"
+                className="text-neutral-500 hover:text-neutral-300 text-xs cursor-pointer px-1"
+              >
+                ✕
+              </button>
             </div>
           ))}
         </div>

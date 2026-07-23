@@ -1,60 +1,86 @@
-import { useState } from 'react'
 
-function FiltrosBar({ turmas, onNovoAtestado, ordenarPor, onOrdenarChange }) {
-  const [busca, setBusca] = useState('')
-  const [turmaSelecionada, setTurmaSelecionada] = useState('todas')
-  const [mes, setMes] = useState('')
-  const [jus, setJus] = useState('')
+function FiltrosBar({
+  numeros,
+  letras,
+  onNovoAtestado,
+  ordenarPor,
+  onOrdenarChange,
+  busca,
+  onBuscaChange,
+  turmaNumeroSelecionada,
+  onTurmaNumeroChange,
+  turmaLetraSelecionada,
+  onTurmaLetraChange,
+  mesSelecionado,
+  onMesChange,
+  tipoSelecionado,
+  onTipoChange,
+  onLimparFiltros,
+}) {
 
   return (
     <div className="flex justify-between items-center mb-4 gap-3 flex-wrap">
       <div className="flex gap-3">
         {/* selecionar a turma */}
         <select
-          value={turmaSelecionada}
-          onChange={(e) => setTurmaSelecionada(e.target.value)}
+          value={turmaNumeroSelecionada}
+          onChange={(e) => onTurmaNumeroChange(e.target.value)}
           className="bg-neutral-900 border border-neutral-800 rounded-md px-3 py-2 text-sm"
         >
-          <option value="todas">Todas as turmas</option>
-          {turmas.map((turma) => (
-            <option key={turma} value={turma}>
-              {turma}
+          <option value="">Todos os números</option>
+          {numeros.map((numero) => (
+            <option key={numero} value={numero}>
+              {numero}
             </option>
           ))}
         </select>
+
+        <select
+          value={turmaLetraSelecionada}
+          onChange={(e) => onTurmaLetraChange(e.target.value)}
+          className="bg-neutral-900 border border-neutral-800 rounded-md px-3 py-2 text-sm"
+        >
+          <option value="">Todas as letras</option>
+          {letras.map((letra) => (
+            <option key={letra} value={letra}>
+              {letra}
+            </option>
+          ))}
+        </select>
+
         {/* selecionar o mês */}
         <select
-          value={mes}
-          onChange={(e) => setMes(e.target.value)}
+          value={mesSelecionado}
+          onChange={(e) => onMesChange(e.target.value)}
           className="bg-neutral-900 border border-neutral-800 rounded-md px-3 py-2 text-sm"
         >
           <option value="">Todos os meses</option>
-          <option value="1">(01) Janeiro</option>
-          <option value="2">(02) Fevereiro</option>
-          <option value="3">(03) Março</option>
-          <option value="4">(04) Abril</option>
-          <option value="5">(05) Maio</option>
-          <option value="6">(06) Junho</option>
-          <option value="7">(07) Julho</option>
-          <option value="8">(08) Agosto</option>
-          <option value="9">(09) Setembro</option>
+          <option value="01">(01) Janeiro</option>
+          <option value="02">(02) Fevereiro</option>
+          <option value="03">(03) Março</option>
+          <option value="04">(04) Abril</option>
+          <option value="05">(05) Maio</option>
+          <option value="06">(06) Junho</option>
+          <option value="07">(07) Julho</option>
+          <option value="08">(08) Agosto</option>
+          <option value="09">(09) Setembro</option>
           <option value="10">(10) Outubro</option>
           <option value="11">(11) Novembro</option>
           <option value="12">(12) Dezembro</option>
         </select>
         {/* selecionar o tipo de justificaiva */}
         <select
-          value={jus}
-          onChange={(e) => setJus(e.target.value)}
+          value={tipoSelecionado}
+          onChange={(e) => onTipoChange(e.target.value)}
           className="bg-neutral-900 border border-neutral-800 rounded-md px-3 py-2 text-sm w-48"
         >
           <option value="">Todos os tipos</option>
-          <option value="1">Atestado</option>
-          <option value="2">Receituário</option>
-          <option value="3">Declaração</option>
-          <option value="4">Laudo</option>
-          <option value="5">Declaração Religiosa</option>
-          <option value="6">Justificado</option>
+          <option value="Atestado">Atestado</option>
+          <option value="Receituário">Receituário</option>
+          <option value="Declaração">Declaração</option>
+          <option value="Laudo">Laudo</option>
+          <option value="Declaração Religiosa">Declaração Religiosa</option>
+          <option value="Justificado">Justificado</option>
         </select>
 
         {/* Filtro e Ordenação */}
@@ -74,15 +100,15 @@ function FiltrosBar({ turmas, onNovoAtestado, ordenarPor, onOrdenarChange }) {
           type="text"
           placeholder="Buscar aluno..."
           value={busca}
-          onChange={(e) => setBusca(e.target.value)}
+          onChange={(e) => onBuscaChange(e.target.value)}
           className="bg-neutral-900 border border-neutral-800 rounded-md px-3 py-2 text-sm w-48"
         />
-        {/* Botão de Buscar */}
+
         <button
-          onClick={() => console.log('buscar', busca, turmaSelecionada, mes)}
-          className="bg-blue-900 border hover:bg-blue-800 border-neutral-800 rounded-md px-3 py-2 text-sm cursor-pointer"
+          onClick={onLimparFiltros}
+          className="bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 rounded-md px-3 py-2 text-sm cursor-pointer"
         >
-          Buscar
+          Limpar
         </button>
 
       </div>

@@ -8,7 +8,7 @@ export const mockAtestados = [
     ateData: '2026-06-27',
     dias: 5,
     lancado: true,
-    tipo: 'Atestado médico',
+    tipo: 'Atestado',
     obs: '',
   },
   {
@@ -20,7 +20,7 @@ export const mockAtestados = [
     ateData: '2026-06-30',
     dias: 13,
     lancado: true,
-    tipo: 'Receituário médico',
+    tipo: 'Receituário',
     obs: '',
   },
   {

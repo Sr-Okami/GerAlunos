@@ -24,11 +24,21 @@ function AtestadosTable({ atestados, onExcluir, onToggleLancado, onEditar }) {
         {atestados.map((atestado) => (
           <tr key={atestado.id} className="border-t border-neutral-800">
             <td className="p-3">{atestado.turmaNumero} - {atestado.turmaLetra}</td>
-            <td className="p-3">{atestado.nome}
-              <BotaoCopiar texto={atestado.nome} />
-              <BotaoObservacao obs={atestado.obs} /></td>
+            <td className="p-3 flex justify-between items-center">{atestado.nome}
+              <div className="flex gap-2">
+                <BotaoObservacao obs={atestado.obs} />
+                <BotaoCopiar texto={atestado.nome} />
+              </div></td>
             <td className="p-3">{formatarData(atestado.data)}</td>
-            <td className="p-3">{formatarData(atestado.ateData)}</td>
+            <td className="p-3">
+              {atestado.ateData ? (
+                atestado.dias
+              ) : (
+                <span className="bg-purple-900 text-purple-400 text-xs px-2 py-1 rounded-full">
+                  Indeterminado
+                </span>
+              )}
+            </td>
             <td className="p-3">{atestado.dias}</td>
             <td className="p-3">{atestado.tipo}</td>
             <td className="p-3 text-center">

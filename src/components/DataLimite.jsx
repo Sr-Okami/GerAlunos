@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { diasRestantes } from '../utils/datas'
+import { useClickOutside } from '../hooks/useClickOutside'
 
 function DataLimite({ atestados, onDispensar }) {
   const [aberto, setAberto] = useState(false)
+  const ref = useClickOutside(aberto, () => setAberto(false))
   const quantidade = atestados.length
 
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block" ref={ref}>
       <button
         onClick={() => setAberto(!aberto)}
         className="bg-yellow-400 px-4 py-2 rounded hover:bg-yellow-500 text-white transition relative cursor-pointer"

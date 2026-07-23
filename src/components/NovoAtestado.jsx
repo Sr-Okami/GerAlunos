@@ -12,6 +12,8 @@ function NovoAtestado({ isOpen, onClose, onSalvar, onAtualizar, atestadoEditando
     tipo: 'Atestado'
   })
   useEffect(() => {
+    if (!isOpen) return
+
     if (atestadoEditando) {
       setFormData(atestadoEditando)
     } else {
@@ -26,7 +28,7 @@ function NovoAtestado({ isOpen, onClose, onSalvar, onAtualizar, atestadoEditando
         tipo: 'Atestado'
       })
     }
-  }, [atestadoEditando])
+  }, [atestadoEditando, isOpen])
 
   // Função para calcular dias úteis (segunda a sexta)
   const calcularDiasUteis = (dataInicio, dataFim) => {
@@ -134,6 +136,7 @@ function NovoAtestado({ isOpen, onClose, onSalvar, onAtualizar, atestadoEditando
                   value={formData.turmaNumero}
                   onChange={handleChange}
                   className="w-full bg-neutral-800 border border-neutral-700 rounded-md px-3 py-2 text-sm"
+                  required
                 >
                   <option value="">Selecione</option>
                   <option value="II">II</option>
@@ -146,6 +149,7 @@ function NovoAtestado({ isOpen, onClose, onSalvar, onAtualizar, atestadoEditando
                   value={formData.turmaLetra}
                   onChange={handleChange}
                   className="w-full bg-neutral-800 border border-neutral-700 rounded-md px-3 py-2 text-sm"
+                  required
                 >
                   <option value="">Selecione</option>
                   <option value="A">A</option>

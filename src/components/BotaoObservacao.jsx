@@ -1,11 +1,14 @@
 import { useState } from 'react'
+import { useClickOutside } from '../hooks/useClickOutside'
+
 
 function BotaoObservacao({ obs }) {
   const [aberto, setAberto] = useState(false)
+  const ref = useClickOutside(aberto, () => setAberto(false))
 
   if (!obs || obs.trim() === '') return null
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block" ref={ref}>
       <button onClick={() => setAberto(!aberto)}
         title="Ver Observação"
         className="text-neutral-500 hover:text-amber-400 cursor-pointer"
