@@ -22,8 +22,12 @@ function createWindow() {
   win.maximize()
   win.show()
 
-  win.loadURL('http://localhost:5173')
-  win.webContents.openDevTools()
+  if (app.isPackaged) {
+    win.loadFile(path.join(__dirname, 'dist', 'index.html'))
+  } else {
+    win.loadURL('http://localhost:5173')
+    win.webContents.openDevTools()
+  }
 }
 
 ipcMain.handle('ping', () => {

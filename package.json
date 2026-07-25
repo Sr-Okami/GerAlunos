@@ -1,7 +1,7 @@
 {
   "name": "geralunos",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "main": "main.js",
   "scripts": {
@@ -9,10 +9,24 @@
     "electron": "electron .",
     "electron-dev": "concurrently \"wait-on http://localhost:5173\" \"electron .\"",
     "build": "vite build",
+    "dist": "npm run build && electron-builder --win portable",
     "lint": "eslint .",
     "preview": "vite preview",
     "format": "prettier --write .",
     "lint:fix": "eslint . --fix"
+  },
+  "build": {
+    "appId": "com.geralunos.app",
+    "productName": "GerAlunos",
+    "files": [
+      "main.js",
+      "preload.cjs",
+      "src-main/**/*",
+      "dist/**/*"
+    ],
+    "win": {
+      "target": "portable"
+    }
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.2",
@@ -28,6 +42,7 @@
     "@vitejs/plugin-react": "^6.0.3",
     "concurrently": "^10.0.3",
     "electron": "^43.1.0",
+    "electron-builder": "^26.15.3",
     "eslint": "^10.6.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-react-hooks": "^7.1.1",
