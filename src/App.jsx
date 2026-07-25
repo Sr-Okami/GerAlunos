@@ -59,28 +59,36 @@ function App() {
       ...novoAtestado,
       status: 'ativo'
     }
-    setAtestados(prev => [novo, ...prev])
+    const atualizados = [novo, ...atestados]
+    setAtestados(atualizados)
+    window.api.criarBackup(atualizados)
+    window.api.registrarLog('criou', novo)
   }
 
   const handleExcluirAtestado = (id) => {
-    setAtestados(prev =>
-      prev.filter(atestado =>
-        atestado.id !== id))
+    const atestado = atestados.find((a) => a.id === id)
+    setAtestados(prev => prev.filter(a => a.id !== id))
+    if (atestado) {
+      window.api.registrarLog('excluiu', atestado)
+    }
   }
+
   const handleAbrirEdicao = (atestado) => {
     setAtestadoEditando(atestado)
     setModalAberto(true)
   }
 
   const handleAtualizarAtestado = (dadosAtualizados) => {
+    const atualizado = { ...atestadoEditando, ...dadosAtualizados }
     setAtestados(prev =>
       prev.map(atestado =>
         atestado.id === atestadoEditando.id
-          ? { ...atestado, ...dadosAtualizados }
+          ? atualizado
           : atestado
       )
     )
     setAtestadoEditando(null)
+    window.api.registrarLog('editou', atualizado)
   }
   const handleFecharModal = () => {
     setModalAberto(false)

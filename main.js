@@ -3,6 +3,9 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { garantirPastas } from './src-main/paths.js'
 import { lerAtestados, salvarAtestados } from './src-main/atestados.js'
+import { lerAlunosImportados } from './src-main/importados.js'
+import { criarBackup } from './src-main/backups.js'
+import { registrarLog } from './src-main/logs.js'
 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -31,6 +34,17 @@ ipcMain.handle('atestados:ler', () => {
 })
 ipcMain.handle('atestados:salvar', (event, atestados) => {
   salvarAtestados(atestados)
+  return true
+})
+ipcMain.handle('importados:ler', () => {
+  return lerAlunosImportados()
+})
+ipcMain.handle('backups:criar', (event, atestados) => {
+  criarBackup(atestados)
+  return true
+})
+ipcMain.handle('logs:registrar', (event, acao, atestado) => {
+  registrarLog(acao, atestado)
   return true
 })
 

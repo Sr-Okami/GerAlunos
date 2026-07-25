@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { normalizarTexto } from '../utils/texto'
+import { useClickOutside } from '../hooks/useClickOutside'
 
 function NovoAtestado({ isOpen, onClose, onSalvar, onAtualizar, atestadoEditando }) {
   const [formData, setFormData] = useState({
@@ -11,6 +13,14 @@ function NovoAtestado({ isOpen, onClose, onSalvar, onAtualizar, atestadoEditando
     obs: '',
     tipo: 'Atestado'
   })
+  const [alunosImportados, setAlunosImportados] = useState([])
+  const [sugestoesAbertas, setSugestoesAbertas] = useState(false)
+  const refSugestoes = useClickOutside(sugestoesAbertas, () => setSugestoesAbertas(false))
+
+  useEffect(() => {
+    window.api.lerImportados().then(setAlunosImportados)
+  }, [])
+
   useEffect(() => {
     if (!isOpen) return
 
@@ -82,7 +92,23 @@ function NovoAtestado({ isOpen, onClose, onSalvar, onAtualizar, atestadoEditando
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
+
+    if (name === 'nome') {
+      const alunoEncontrado = alunosImportados.find(a => a.nome === value)
+      if (alunoEncontrado) {
+        setFormData(prev => ({
+          ...prev,
+          nome: value,
+          turmaNumero: alunoEncontrado.turmaNumero,
+          turmaLetra: alunoEncontrado.turmaLetra,
+        }))
+        return
+      }
+    }
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+    }))
   }
 
   const handleSubmit = (e) => {
@@ -97,6 +123,13 @@ function NovoAtestado({ isOpen, onClose, onSalvar, onAtualizar, atestadoEditando
 
   if (!isOpen) return null
 
+  const nomeUnicos = [...new Set(alunosImportados.map(a => a.nome))]
+  const sugestoesFiltradas =
+    formData.nome.trim() === ''
+      ? []
+      : alunosImportados.filter((aluno) =>
+        normalizarTexto(aluno.nome).includes(normalizarTexto(formData.nome))
+      )
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-neutral-900 rounded-lg p-6 w-full max-w-md border border-neutral-800">
@@ -117,14 +150,41 @@ function NovoAtestado({ isOpen, onClose, onSalvar, onAtualizar, atestadoEditando
             {/* Aluno */}
             <div>
               <label className="block text-sm text-neutral-400 mb-1">Aluno</label>
-              <input
-                type="text"
-                name="nome"
-                value={formData.nome}
-                onChange={handleChange}
-                className="w-full bg-neutral-800 border border-neutral-700 rounded-md px-3 py-2 text-sm"
-                required
-              />
+              <div ref={refSugestoes} className="relative">
+                <input
+                  type="text"
+                  name="nome"
+                  value={formData.nome}
+                  onChange={handleChange}
+                  onFocus={() => setSugestoesAbertas(true)}
+                  className="w-full bg-neutral-800 border border-neutral-700 rounded-md px-3 py-2 text-sm"
+                  required
+                  autoComplete="off"
+                />
+
+                {sugestoesAbertas && sugestoesFiltradas.length > 0 && (
+                  <div className="absolute left-0 right-0 mt-1 bg-neutral-800 border border-neutral-700 rounded-md shadow-lg z-50 max-h-40 overflow-y-auto">
+                    {sugestoesFiltradas.map((aluno) => (
+                      <button
+                        key={aluno.nome}
+                        type="button"
+                        onClick={() => {
+                          setFormData((prev) => ({
+                            ...prev,
+                            nome: aluno.nome,
+                            turmaNumero: aluno.turmaNumero,
+                            turmaLetra: aluno.turmaLetra,
+                          }))
+                          setSugestoesAbertas(false)
+                        }}
+                        className="w-full text-left px-3 py-2 text-sm hover:bg-neutral-700 cursor-pointer"
+                      >
+                        {aluno.nome}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Turma */}
