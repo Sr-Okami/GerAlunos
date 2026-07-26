@@ -3,6 +3,9 @@ import path from 'path'
 import fs from 'fs'
 
 export function getBaseDir() {
+  if (process.env.PORTABLE_EXECUTABLE_DIR) {
+    return process.env.PORTABLE_EXECUTABLE_DIR
+  }
   if (app.isPackaged) {
     return path.dirname(process.execPath)
   }
