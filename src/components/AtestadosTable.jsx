@@ -32,7 +32,7 @@ function AtestadosTable({ atestados, onExcluir, onToggleLancado, onEditar }) {
             <td className="p-3">{formatarData(atestado.data)}</td>
             <td className="p-3">
               {atestado.ateData ? (
-                atestado.dias
+                formatarData(atestado.ateData)
               ) : (
                 <span className="bg-purple-900 text-purple-400 text-xs px-2 py-1 rounded-full">
                   Indeterminado
