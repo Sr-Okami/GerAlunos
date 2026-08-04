@@ -2,7 +2,7 @@ import { app, BrowserWindow, Menu, ipcMain } from 'electron'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { garantirPastas } from './src-main/paths.js'
-import { lerAtestados, salvarAtestados } from './src-main/atestados.js'
+import { listarAtestados, criarAtestado, atualizarAtestado, excluirAtestado } from './src-main/atestados.js'
 import { lerAlunosImportados } from './src-main/importados.js'
 import { criarBackup } from './src-main/backups.js'
 import { registrarLog } from './src-main/logs.js'
@@ -33,11 +33,20 @@ function createWindow() {
 ipcMain.handle('ping', () => {
   return 'pong! (resposta main.js)'
 })
-ipcMain.handle('atestados:ler', () => {
-  return lerAtestados()
+ipcMain.handle('atestados:listar', () => {
+  return listarAtestados()
 })
-ipcMain.handle('atestados:salvar', (event, atestados) => {
-  salvarAtestados(atestados)
+
+ipcMain.handle('atestados:criar', (event, atestado) => {
+  return criarAtestado(atestado)
+})
+
+ipcMain.handle('atestados:atualizar', (event, id, atestado) => {
+  return atualizarAtestado(id, atestado)
+})
+
+ipcMain.handle('atestados:excluir', (event, id) => {
+  excluirAtestado(id)
   return true
 })
 ipcMain.handle('importados:ler', () => {

@@ -26,16 +26,11 @@ function App() {
   const [dispensadosAtencao, setDispensadosAtencao] = useState([])
 
   useEffect(() => {
-    window.api.lerAtestados().then((dados) => {
+    window.api.listarAtestados().then((dados) => {
       setAtestados(dados)
       setCarregado(true)
     })
   }, [])
-
-  useEffect(() => {
-      if (!carregado) return
-      window.api.salvarAtestados(atestados)
-    }, [atestados, carregado])
 
 
   const atestadosFiltrados = atestados.filter((atestado) => {
@@ -53,21 +48,17 @@ function App() {
     return 0
   })
 
-  const handleSalvarAtestado = (novoAtestado) => {
-    const novo = {
-      id: Date.now(),
-      ...novoAtestado,
-      status: 'ativo'
-    }
-    const atualizados = [novo, ...atestados]
-    setAtestados(atualizados)
-    window.api.criarBackup(atualizados)
-    window.api.registrarLog('criou', novo)
+  const handleSalvarAtestado = async (novoAtestado) => {
+    const criado = await window.api.criarAtestado(novoAtestado)
+    setAtestados((prev) => [criado, ...prev])
+    window.api.criarBackup([criado, ...atestados])
+    window.api.registrarLog('criou', criado)
   }
 
-  const handleExcluirAtestado = (id) => {
+  const handleExcluirAtestado = async (id) => {
     const atestado = atestados.find((a) => a.id === id)
-    setAtestados(prev => prev.filter(a => a.id !== id))
+    await window.api.excluirAtestado(id)
+    setAtestados((prev) => prev.filter((a) => a.id !== id))
     if (atestado) {
       window.api.registrarLog('excluiu', atestado)
     }
@@ -78,14 +69,10 @@ function App() {
     setModalAberto(true)
   }
 
-  const handleAtualizarAtestado = (dadosAtualizados) => {
-    const atualizado = { ...atestadoEditando, ...dadosAtualizados }
-    setAtestados(prev =>
-      prev.map(atestado =>
-        atestado.id === atestadoEditando.id
-          ? atualizado
-          : atestado
-      )
+  const handleAtualizarAtestado = async (dadosAtualizados) => {
+    const atualizado = await window.api.atualizarAtestado(atestadoEditando.id, dadosAtualizados)
+    setAtestados((prev) =>
+      prev.map((atestado) => (atestado.id === atualizado.id ? atualizado : atestado))
     )
     setAtestadoEditando(null)
     window.api.registrarLog('editou', atualizado)
