@@ -81,13 +81,11 @@ function App() {
     setModalAberto(false)
     setAtestadoEditando(null)
   }
-  const handleToggleLancado = (id) => {
-    setAtestados(prev =>
-      prev.map(atestado =>
-        atestado.id === id ?
-          { ...atestado, lancado: !atestado.lancado } :
-          atestado
-      )
+  const handleToggleLancado = async (id) => {
+    const atestado = atestados.find((a) => a.id === id)
+    const atualizado = await window.api.atualizarAtestado(id, { ...atestado, lancado: !atestado.lancado })
+    setAtestados((prev) =>
+      prev.map((a) => (a.id === id ? atualizado : a))
     )
   }
   const atestadosVencendo = atestados.filter((atestado) => {
