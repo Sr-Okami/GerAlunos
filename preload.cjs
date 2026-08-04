@@ -9,4 +9,6 @@ contextBridge.exposeInMainWorld('api', {
   lerImportados: () => ipcRenderer.invoke('importados:ler'),
   criarBackup: (atestados) => ipcRenderer.invoke('backups:criar', atestados),
   registrarLog: (acao, atestado) => ipcRenderer.invoke('logs:registrar', acao, atestado),
+  listarDismissals: (tipo) => ipcRenderer.invoke('dismissals:listar', tipo),
+  adicionarDismissal: (atestadoId, tipo) => ipcRenderer.invoke('dismissals:adicionar', atestadoId, tipo),
 })

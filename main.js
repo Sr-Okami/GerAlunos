@@ -6,6 +6,7 @@ import { listarAtestados, criarAtestado, atualizarAtestado, excluirAtestado } fr
 import { lerAlunosImportados } from './src-main/importados.js'
 import { criarBackup } from './src-main/backups.js'
 import { registrarLog } from './src-main/logs.js'
+import { listarDismissals, adicionarDismissal } from './src-main/atestados.js'
 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -58,6 +59,13 @@ ipcMain.handle('backups:criar', (event, atestados) => {
 })
 ipcMain.handle('logs:registrar', (event, acao, atestado) => {
   registrarLog(acao, atestado)
+  return true
+})
+ipcMain.handle('dismissals:listar', (event, tipo) => {
+  return listarDismissals(tipo)
+})
+ipcMain.handle('dismissals:adicionar', (event, atestadoId, tipo) => {
+  adicionarDismissal(atestadoId, tipo)
   return true
 })
 

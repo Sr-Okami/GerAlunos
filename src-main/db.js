@@ -25,5 +25,13 @@ export function getDb() {
     )
   `)
 
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS dismissals (
+      atestadoId INTEGER NOT NULL,
+      tipo TEXT NOT NULL,
+      PRIMARY KEY (atestadoId, tipo)
+    )
+  `)
+
   return db
 }

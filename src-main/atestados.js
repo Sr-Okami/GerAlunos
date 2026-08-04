@@ -60,3 +60,14 @@ export function excluirAtestado(id) {
   const db = getDb()
   db.prepare('DELETE FROM atestados WHERE id = ?').run(id)
 }
+
+export function listarDismissals(tipo) {
+  const db = getDb()
+  const linhas = db.prepare('SELECT atestadoId FROM dismissals WHERE tipo = ?').all(tipo)
+  return linhas.map((l) => l.atestadoId)
+}
+
+export function adicionarDismissal(atestadoId, tipo) {
+  const db = getDb()
+  db.prepare('INSERT OR IGNORE INTO dismissals (atestadoId, tipo) VALUES (?, ?)').run(atestadoId, tipo)
+}

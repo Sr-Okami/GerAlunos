@@ -30,6 +30,8 @@ function App() {
       setAtestados(dados)
       setCarregado(true)
     })
+    window.api.listarDismissals('data_limite').then(setDispensados)
+    window.api.listarDismissals('atencao').then(setDispensadosAtencao)
   }, [])
 
 
@@ -93,11 +95,13 @@ function App() {
     return dias !== null && dias <= 4 && !dispensados.includes(atestado.id)
   })
   const handleDispensar = (id) => {
+    window.api.adicionarDismissal(id, 'data_limite')
     setDispensados(prev => [...prev, id])
   }
   const handleDispensarAtencao = (id) => {
     const confirmar = window.confirm('Tem certeza que deseja remover este atestado da lista')
     if (confirmar) {
+      window.api.adicionarDismissal(id, 'atencao')
       setDispensadosAtencao(prev => [...prev, id])
     }
   }
